@@ -1,6 +1,5 @@
 import { galleryItems } from './gallery-items.js';
 
-const basicLightbox = window.basicLightbox;
 const body = document.querySelector('body');
 const gallery = document.querySelector('.gallery');
 
@@ -23,27 +22,37 @@ const galleryContent = galleryItems
 
 gallery.insertAdjacentHTML('afterbegin', galleryContent);
 
+setImagesClickListeners();
+
 let currentInstance = null;
 
-const handleClick = (event) => {
+function handleClick(event) {
     event.preventDefault();
-    const instance = basicLightbox.create(`
+    const instance = basicLightbox.create(
+        `
     <div class="modal">
         <img src="${event.target.dataset.source}" width="900" height="700" alt="${event.target.alt}">
     </div>
-`);
-    instance.show(() => body.addEventListener('keyup', escapeClose));
+    
+`,
+        {
+            onShow: () => body.addEventListener('keyup', escapeClose),
+            onClose: () => body.removeEventListener('keyup', escapeClose),
+        }
+    );
+
+    instance.show();
     currentInstance = instance;
-};
+}
 
 function escapeClose(event) {
     if (event.code === 'Escape') {
-        currentInstance.close(() =>
-            body.removeEventListener('keyup', escapeClose)
-        );
+        currentInstance.close();
     }
 }
 
-gallery.addEventListener('click', handleClick);
-
-console.log(galleryItems);
+function setImagesClickListeners() {
+    for (let i = 0; i < gallery.children.length; i++) {
+        gallery.children[i].addEventListener('click', handleClick);
+    }
+}
