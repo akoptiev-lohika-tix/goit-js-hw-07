@@ -27,6 +27,10 @@ let currentInstance = null;
 
 function handleClick(event) {
     event.preventDefault();
+    if (event.target.tagName !== 'IMG') {
+        return;
+    }
+
     const instance = basicLightbox.create(
         `
     <div class="modal">
