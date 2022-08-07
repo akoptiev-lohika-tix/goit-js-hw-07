@@ -21,8 +21,7 @@ const galleryContent = galleryItems
     .join('');
 
 gallery.insertAdjacentHTML('afterbegin', galleryContent);
-
-setImagesClickListeners();
+gallery.addEventListener('click', handleClick);
 
 let currentInstance = null;
 
@@ -48,11 +47,5 @@ function handleClick(event) {
 function escapeClose(event) {
     if (event.code === 'Escape') {
         currentInstance.close();
-    }
-}
-
-function setImagesClickListeners() {
-    for (let i = 0; i < gallery.children.length; i++) {
-        gallery.children[i].addEventListener('click', handleClick);
     }
 }
